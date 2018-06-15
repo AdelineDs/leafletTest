@@ -1,0 +1,46 @@
+[
+    {"id" : 1,
+     "nom" : "Plage du Conquet",
+     "description" : "La plage du Conquet depuis la pointe du Kermorvan",
+     "url" : "img/LeConquet.jpg",
+     "position" : {"lat" : 48.362595, "lng" : -4.788442 },
+     "visibility" : 1
+    },
+    {"id" : 2,
+     "nom" : "Longemer",
+     "description" : "Le lac de Longemer près de Gérardmer",
+     "url" : "img/longemer.jpg",
+     "position" : {"lat" : 48.067688, "lng" : 6.954273},
+     "visibility" : 1
+    },
+    {"id" : 3,
+     "nom" : "Le phare du petit Minou",
+     "description" : "Le phare du Petit Minou dans le Finistère",
+     "url" : "img/pharePetitMinou.jpg",
+     "position" : {"lat" : 48.336592, "lng" : -4.614252},
+     "visibility" : 1
+    },
+    {"id" : 4,
+     "nom" : "Le phare du Portzic",
+     "description" : "Le phare du Portzic à Brest",
+     "url" : "img/pharePortzic.jpg",
+     "position" : {"lat" : 48.358303, "lng" : -4.534028},
+     "visibility" : 1
+    },
+    {"id" : 5,
+     "nom" : "Sainte Yved",
+     "description" : "L'abbatiale St Yved de Braine",
+     "url" : "img/StYved.jpg",
+     "position" : {"lat" : 49.33951, "lng" : 3.535375},
+     "visibility" : 1
+    },
+    {"id" : 6,
+     "nom" : "Phare du petit Minou",
+     "description" : "Vue sur le phare du Petit Minou dans le Finistère",
+     "url" : "img/minou2.jpg",
+     "position" : {"lat" : 48.336592, "lng" : -4.614252},
+     "visibility" : 1
+    }
+]
+
+
