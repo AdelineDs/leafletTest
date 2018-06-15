@@ -14,7 +14,7 @@ ajaxGet("http://localhost/Projets_perso/photosJavascript/photos.json", function 
         var marker = new L.Marker(latLng, {title: photo.nom});
         markersCluster.addLayer(marker);
         marker.bindPopup('<h3>' + photo.nom + '</h3>'
-                                    + '<a href="http://localhost/Projets_perso/photosJavascript/img/minou2.JPG" target="_blank"><img alt="' + photo.description + '" src="' + photo.url +'" width="100px" height="auto"></a>'
+                                    + '<a href="http://localhost/Projets_perso/photosJavascript/' + photo.url + '" target="_blank"><img alt="' + photo.description + '" src="' + photo.url +'" width="100px" height="auto"></a>'
                                     + '<p>' + photo.description + '<p>'
                                     )
     }
