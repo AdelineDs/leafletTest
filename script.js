@@ -9,26 +9,48 @@ ajaxGet("http://localhost/Projets_perso/photosJavascript/photos.json", function 
     var listePhotos = JSON.parse(reponse);
     var markersCluster = L.markerClusterGroup();
     for (var i = 0; i < listePhotos.length; i++) {
-        var photo = listePhotos[i];
+        let photo = listePhotos[i];
         var latLng = new L.LatLng(photo.position.lat, photo.position.lng);
         var marker = new L.Marker(latLng, {title: photo.nom});
         markersCluster.addLayer(marker);
-        marker.bindPopup('<h3>' + photo.nom + '</h3>'
+
+        marker.on('click', function(){
+            var gallery = document.getElementById("gallery")
+           if(document.getElementById("thumbnailsLink")){
+               gallery.innerHTML="";
+           }
+            var lien = document.createElement("a");
+            lien.id = "thumbnailsLink";
+            lien.href = 'http://localhost/Projets_perso/photosJavascript/' + photo.url;
+            
+            var photoMin = document.createElement("img");
+            photoMin.className = "thumbnails";
+            photoMin.alt = photo.description;
+            photoMin.src =  photo.url;
+            
+            lien.appendChild(photoMin);
+            gallery.appendChild(lien);
+            
+            var caption = document.createElement("p");
+            caption.className = "caption";
+            caption.appendChild(document.createTextNode(photo.description));
+            gallery.appendChild(caption);
+            
+        
+        });
+        
+       /* marker.bindPopup('<h3>' + photo.nom + '</h3>'
                                     + '<a href="http://localhost/Projets_perso/photosJavascript/' + photo.url + '" ><img alt="' + photo.description + '" src="' + photo.url +'" width="100px" height="auto"></a>'
                                     + '<p>' + photo.description + '<p>'
-                                    )
-    }
+                                    )*/
+    }//end for ----------------------------------
     
-
-
-    mymap.addLayer(markersCluster);
-    
-    
+    mymap.addLayer(markersCluster);  
 });
 
 $(document).ready(function() {
     
-    $('#map').magnificPopup({
+    $('#gallery').magnificPopup({
             delegate: "a",
             type: 'image',
             closeOnContentClick : true,

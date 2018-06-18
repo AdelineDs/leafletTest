@@ -40,7 +40,22 @@
      "url" : "img/minou2.jpg",
      "position" : {"lat" : 48.336592, "lng" : -4.614252},
      "visibility" : 1
+    },
+    {"id" : 7,
+     "nom" : "Cathédrale de Troyes",
+     "description" : "A l'intérieur de la cathédrale de Troyes",
+     "url" : "img/troyes.jpg",
+     "position" : {"lat" : 48.300208, "lng" : 4.080853},
+     "visibility" : 1
+    },
+     {"id" : 8,
+     "nom" : "TEST RAYON",
+     "description" : "TEST !!",
+     "url" : "img/troyes.jpg",
+     "position" : {"lat" : 48.250992, "lng" : 4.103663},
+     "visibility" : 1
     }
 ]
+
 
 
