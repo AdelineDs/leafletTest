@@ -5,15 +5,27 @@
 
 body {
     display: flex;
-    align-items: center;
     margin: 50px;
 }
 
-#gallery {
+#gallery, #boundsGallery {
     margin-left: 30px;
 }
 
 .thumbnails{
     max-width: 500px;
     max-height: 400px;
+}
+
+.thumbnails2{
+    max-width: 300px;
+    max-height: 200px;
+}
+
+#boundsGallery {
+    display: flex;
+}
+
+.suggested{
+    margin: 20px;
 }
