@@ -1,3 +1,4 @@
+/*
 var france = [48.862725, 2.287592]
 //création de la map
 var mymap = L.map('map').setView(france, 6);
@@ -8,10 +9,8 @@ L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/
 ajaxGet("http://localhost/Projets_perso/photosJavascript/photos.json", function (reponse) {
     var listePhotos = JSON.parse(reponse);
     var markersCluster = L.markerClusterGroup();
-    var allPhotos = [];
     for (var i = 0; i < listePhotos.length; i++) {
         let photo = listePhotos[i];
-        allPhotos.push(photo);
         var latLng = new L.LatLng(photo.position.lat, photo.position.lng);
         let marker = new L.Marker(latLng, {title: photo.nom, alt: latLng});
         markersCluster.addLayer(marker);
@@ -69,7 +68,7 @@ ajaxGet("http://localhost/Projets_perso/photosJavascript/photos.json", function 
             boundsGallery.appendChild(texte);
                         
             
-            allPhotos.forEach(function(aPhoto){
+            listePhotos.forEach(function(aPhoto){
                 if(aPhoto.position.lat !== currentPos.lat && aPhoto.position.lng !== currentPos.lng){
                     if(bounds.contains(aPhoto.position)) {
                         $('.none').hide();
@@ -141,3 +140,65 @@ $(document).ready(function() {
             }
     });
 });
+
+
+
+*/
+
+
+
+class leafletMap{
+    constructor(map, latLng=[48.862725, 2.287592], zoom=6, layer='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', maxZoom=18){
+        this.map = map;
+        this.latLng = latLng;
+        this.zoom = zoom;
+        this.layer = layer;
+        this.maxZoom = maxZoom;
+        this.myMap = L.map(this.map).setView(this.latLng,this.zoom);
+        
+        L.tileLayer(this.layer, {maxZoom: this.maxZoom}).addTo(this.myMap);
+    }//-- end constructor --
+    
+    photoRecovery(source) {
+        ajaxGet(source, reponse => {
+            let photosList = JSON.parse(reponse);
+            let markersCluster = L.markerClusterGroup();
+            
+            for(let photo of photosList){
+                let latLng = new L.LatLng(photo.position.lat, photo.position.lng);
+                let marker = new L.Marker(latLng, {title: photo.nom});
+                markersCluster.addLayer(marker);
+                
+                marker.on('click', ()=>{
+                    const gallery = document.getElementById("gallery")
+                    if(document.getElementById("thumbnailsLink")){
+                        gallery.innerHTML="";
+                    }
+                    const link = document.createElement("a");
+                    link.id = "thumbnailsLink";
+                    link.href = 'http://localhost/Projets_perso/photosJavascript/' + photo.url;
+
+                    const thumbnails = document.createElement("img");
+                    thumbnails.className = "thumbnails";
+                    thumbnails.alt = photo.description;
+                    thumbnails.src =  photo.url;
+
+                    link.appendChild(thumbnails);
+                    gallery.appendChild(link);
+
+                    const caption = document.createElement("p");
+                    caption.className = "caption";
+                    caption.appendChild(document.createTextNode(photo.description));
+                    gallery.appendChild(caption);
+                });//-- end marker.on --
+                
+            }//-- end for --
+            this.myMap.addLayer(markersCluster);
+        });//-- end ajaxGet --
+    }//-- end photoRecorvery --    
+}//---- END CLASS LEAFLETMAP ----
+
+window.onload = function(){
+    let myMap = new leafletMap("map");
+    myMap.photoRecovery("http://localhost/Projets_perso/photosJavascript/photos.json");
+}

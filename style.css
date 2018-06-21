@@ -1,4 +1,4 @@
-#map { 
+#map{ 
     height: 500px; 
     width: 700px;
 }
@@ -15,11 +15,6 @@ body {
 .thumbnails{
     max-width: 500px;
     max-height: 400px;
-}
-
-.thumbnails2{
-    max-width: 300px;
-    max-height: 200px;
 }
 
 #boundsGallery {
