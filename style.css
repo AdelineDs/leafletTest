@@ -4,8 +4,11 @@
 }
 
 body {
-    display: flex;
     margin: 50px;
+}
+
+#mapAndPhoto{
+    display: flex;
 }
 
 #gallery, #boundsGallery {
@@ -17,10 +20,19 @@ body {
     max-height: 400px;
 }
 
+.thumbnails2{
+    max-width: 300px;
+    max-height: 200px;
+}
+
 #boundsGallery {
     display: flex;
 }
 
 .suggested{
     margin: 20px;
+}
+
+.list-markers-li a{
+    color: black;
 }

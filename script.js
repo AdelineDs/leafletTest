@@ -1,4 +1,3 @@
-/*
 var france = [48.862725, 2.287592]
 //création de la map
 var mymap = L.map('map').setView(france, 6);
@@ -9,41 +8,72 @@ L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/
 ajaxGet("http://localhost/Projets_perso/photosJavascript/photos.json", function (reponse) {
     var listePhotos = JSON.parse(reponse);
     var markersCluster = L.markerClusterGroup();
+    var takenIds = [];
+    var addedImage = false;
     for (var i = 0; i < listePhotos.length; i++) {
         let photo = listePhotos[i];
+        var photoGallerie = [];
+        for(var j = i; j<listePhotos.length; j++){
+            if(!contains.call(takenIds, photo.id)){//si takenIds ne contient pas id de la photo
+                photoGallerie.push(photo); // le photo est ajoutée au tableau photoGallerie
+                takenIds.unshift(photo.id);//ajoute en début de tableau
+                addedImage = true;
+            
+            }
+            var picture = listePhotos[j];
+            if(photo.position.lat == picture.position.lat && photo.position.lng == picture.position.lng){//si les deux photos comparée ont la même position
+                  if(!contains.call(takenIds, picture.id)){ //et que takenIds ne contient pas déjà cette id
+                    photoGallerie.push(picture);//alors on ajoute cette photo à photoGallerie
+                takenIds.push(picture.id);// et son id à takenIds
+                console.log(takenIds);
+                
+            }
+            }
+        }
+        if(addedImage){
+             takenIds.shift();//retire le premier élément du tableau
+            addedImage = false;
+        }
         var latLng = new L.LatLng(photo.position.lat, photo.position.lng);
-        let marker = new L.Marker(latLng, {title: photo.nom, alt: latLng});
-        markersCluster.addLayer(marker);
-        marker.on('click', function(){
-            var gallery = document.getElementById("gallery")
-           if(document.getElementById("thumbnailsLink")){
-               gallery.innerHTML="";
-           }
-            let lien = document.createElement("a");
-            lien.id = "thumbnailsLink";
-            lien.href = 'http://localhost/Projets_perso/photosJavascript/' + photo.url;
-            
-            var photoMin = document.createElement("img");
-            photoMin.className = "thumbnails";
-            photoMin.alt = photo.description;
-            photoMin.src =  photo.url;
-            
-            lien.appendChild(photoMin);
-            gallery.appendChild(lien);
-            
-            var caption = document.createElement("p");
-            caption.className = "caption";
-            caption.appendChild(document.createTextNode(photo.description));
-            gallery.appendChild(caption);
-        });
+        if(!contains.call(takenIds, photo.id)){
+            let marker = new L.Marker(latLng, {title: photo.nom});
+            marker.gallerie = photoGallerie;
+            markersCluster.addLayer(marker);
+           
+            marker.on('click', function(){
+                console.log(marker);
+                /*var imageGallerie = new Gallerie(marker.gallerie);*/
+
+                var gallery = document.getElementById("gallery");
+               if(document.getElementById("thumbnailsLink")){
+                   gallery.innerHTML="";
+               }
+                let lien = document.createElement("a");
+                lien.id = "thumbnailsLink";
+                lien.href = 'http://localhost/Projets_perso/photosJavascript/' + photo.url;
+
+                var photoMin = document.createElement("img");
+                photoMin.className = "thumbnails";
+                photoMin.alt = photo.description;
+                photoMin.src =  photo.url;
+
+                lien.appendChild(photoMin);
+                gallery.appendChild(lien);
+
+                var caption = document.createElement("p");
+                caption.className = "caption";
+                caption.appendChild(document.createTextNode(photo.description));
+                gallery.appendChild(caption);
+            });
+        }
         
-        var circle = L.circle([48.856614 , 2.352222], {
+         var circle = L.circle([48.856614 , 2.352222], {
             color: 'white',
             fillColor: '#fff',
             fillOpacity: 0.5,
             radius: 10000
         });
-
+        
         function onMapClick(e) { 
             $('h3').hide()
             $('.none').hide()
@@ -100,7 +130,7 @@ ajaxGet("http://localhost/Projets_perso/photosJavascript/photos.json", function 
                 }
             })
         }
-        marker.on('click', onMapClick);
+       mymap.on('click', onMapClick);
     }//end for ----------------------------------
     
     mymap.addLayer(markersCluster);  
@@ -142,63 +172,24 @@ $(document).ready(function() {
 });
 
 
-
-*/
-
-
-
-class leafletMap{
-    constructor(map, latLng=[48.862725, 2.287592], zoom=6, layer='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', maxZoom=18){
-        this.map = map;
-        this.latLng = latLng;
-        this.zoom = zoom;
-        this.layer = layer;
-        this.maxZoom = maxZoom;
-        this.myMap = L.map(this.map).setView(this.latLng,this.zoom);
-        
-        L.tileLayer(this.layer, {maxZoom: this.maxZoom}).addTo(this.myMap);
-    }//-- end constructor --
-    
-    photoRecovery(source) {
-        ajaxGet(source, reponse => {
-            let photosList = JSON.parse(reponse);
-            let markersCluster = L.markerClusterGroup();
-            
-            for(let photo of photosList){
-                let latLng = new L.LatLng(photo.position.lat, photo.position.lng);
-                let marker = new L.Marker(latLng, {title: photo.nom});
-                markersCluster.addLayer(marker);
-                
-                marker.on('click', ()=>{
-                    const gallery = document.getElementById("gallery")
-                    if(document.getElementById("thumbnailsLink")){
-                        gallery.innerHTML="";
-                    }
-                    const link = document.createElement("a");
-                    link.id = "thumbnailsLink";
-                    link.href = 'http://localhost/Projets_perso/photosJavascript/' + photo.url;
-
-                    const thumbnails = document.createElement("img");
-                    thumbnails.className = "thumbnails";
-                    thumbnails.alt = photo.description;
-                    thumbnails.src =  photo.url;
-
-                    link.appendChild(thumbnails);
-                    gallery.appendChild(link);
-
-                    const caption = document.createElement("p");
-                    caption.className = "caption";
-                    caption.appendChild(document.createTextNode(photo.description));
-                    gallery.appendChild(caption);
-                });//-- end marker.on --
-                
-            }//-- end for --
-            this.myMap.addLayer(markersCluster);
-        });//-- end ajaxGet --
-    }//-- end photoRecorvery --    
-}//---- END CLASS LEAFLETMAP ----
-
-window.onload = function(){
-    let myMap = new leafletMap("map");
-    myMap.photoRecovery("http://localhost/Projets_perso/photosJavascript/photos.json");
-}
+var contains = function(needle) {
+    // Per spec, the way to identify NaN is that it is not equal to itself
+    var findNaN = needle !== needle;
+    var indexOf;
+    if(!findNaN && typeof Array.prototype.indexOf === 'function') {
+        indexOf = Array.prototype.indexOf;
+    } else {
+        indexOf = function(needle) {
+            var i = -1, index = -1;
+            for(i = 0; i < this.length; i++) {
+                var item = this[i];
+                if((findNaN && item !== item) || item === needle) {
+                    index = i;
+                    break;
+                }
+            }
+            return index;
+        };
+    }
+    return indexOf.call(this, needle) > -1;
+};
